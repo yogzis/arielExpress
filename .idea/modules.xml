@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Student\Downloads\arielExpress4-master\arielExpress4-master\app\app.iml" filepath="C:\Users\Student\Downloads\arielExpress4-master\arielExpress4-master\app\app.iml" />
       <module fileurl="file://C:\Users\Student\Downloads\arielExpress4-master\arielExpress4-master\arielExpress.iml" filepath="C:\Users\Student\Downloads\arielExpress4-master\arielExpress4-master\arielExpress.iml" />
       <module fileurl="file://$PROJECT_DIR$/arielExpress4-master.iml" filepath="$PROJECT_DIR$/arielExpress4-master.iml" />
     </modules>

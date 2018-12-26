@@ -6,6 +6,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -92,33 +93,36 @@ public class ItemScreen extends AppCompatActivity  {
         setContentView(R.layout.item_screen);
 
         Bundle extras = getIntent().getExtras();
+
         Bitmap bmp = (Bitmap) extras.getParcelable("imagebitmap");
         ImageView image=new ImageView(this);
         image.setImageBitmap(bmp);
+
         setImage(image);
+        if(this.image==null)Log.i("onCreate","no image");
         ((ImageView) findViewById(R.id.image)).setImageBitmap(bmp );
         ((TextView) findViewById(R.id.desc)).setText(getIntent().getStringExtra("desc"));
         setDesc(getIntent().getStringExtra("desc"));
-        ((TextView) findViewById(R.id.price)).setText(getIntent().getIntExtra("price",0));
+        ((TextView) findViewById(R.id.price)).setText(String.valueOf(getIntent().getIntExtra("price",0)));
         setPrice(getIntent().getIntExtra("price",0));
-        radioGroup1=(RadioGroup)findViewById(R.id.radioGroup1);
-        radioGroup1.setBottom(R.id.s);
         radioGroup2=(RadioGroup)findViewById(R.id.radioGroup2);
-        radioGroup2.setBottom(R.id.light);
 
 
     }
 
    public void setSize(View view){
+       radioGroup1=(RadioGroup)findViewById(R.id.radioGroup1);
         int radioId=radioGroup1.getCheckedRadioButtonId();
-        this.sizeButton=findViewById(radioId);
-        setSize(sizeButton.getText().toString());
+       Log.i("setSize",""+radioId);
+       Log.i("setSize",""+R.id.m);
+        this.sizeButton=(RadioButton) findViewById(radioId);
+        setSize(""+sizeButton.getText());
    }
 
     public void setColor(View view){
         int radioId=radioGroup2.getCheckedRadioButtonId();
         this.colorButton=findViewById(radioId);
-        setColor(colorButton.getText().toString());
+        setColor((String)colorButton.getText());
     }
 
     public void addToBag(View view){
@@ -139,6 +143,7 @@ public class ItemScreen extends AppCompatActivity  {
         intent.putExtra("price",getPrice());
 
         startActivity(intent);*/
+
         ShoppingCart.itemsInBag.add(this);
 
     }

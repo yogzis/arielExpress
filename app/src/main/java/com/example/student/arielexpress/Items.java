@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +31,7 @@ public class Items extends AppCompatActivity implements View.OnClickListener {
 ImageView image;
 int price;
 String desc;
+String PATH;
 
 
 
@@ -48,18 +50,16 @@ String desc;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.items);
-        image=(ImageView) findViewById(R.id.i1);
         int category=getIntent().getIntExtra("category",0);
-        addValueEventListener(category);
-        jmdkldsfjk
+        loadDescriptionAndImage(category);
 
     }
 
 
-    private void addValueEventListener(final int category) {
+    private void loadDescriptionAndImage(final int category) {
         ImageView i=(ImageView) findViewById(R.id.i1);
         StorageReference imageRef=getImageRefernce(category);
-        downloadDirect(imageRef,i);
+        downloadDirectImage(imageRef,i);
         final TextView d=(TextView)findViewById(R.id.d1);
         final TextView p=(TextView)findViewById(R.id.p1);
 
@@ -71,17 +71,15 @@ String desc;
                 String desc = null;
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     if(childIndex==category){
-                        int i=0;
                         for(DataSnapshot childData : data.getChildren()){
 
-                            if(i%2==0) {
+                            if(childData.getKey().toString().contains("desc")) {
                                 d.setText(""+childData.getValue());
                             }
-                           else if(i%2==1){
+                           else {
                                 p.setText(""+childData.getValue());
                             }
 
-                            ++i;
                         }
                     }
                     childIndex++;
@@ -120,6 +118,7 @@ String desc;
                 break;
 
         }
+        PATH=ref.toString();
         return ref;
     }
 
@@ -130,7 +129,8 @@ String desc;
       switch(view.getId()){
           case R.id.d1:
               putIntent((ImageView)findViewById(R.id.i1), ((TextView)findViewById(R.id.d1)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p1)).getText().toString()),intent);
+                      Integer.parseInt(((String)((TextView)findViewById(R.id.p1)).getText().toString()).trim())
+                      ,intent);
               break;
          /* case R.id.d2:
               putIntent((ImageView)findViewById(R.id.i2), ((TextView)findViewById(R.id.d2)).getText().toString(),
@@ -147,53 +147,13 @@ String desc;
           case R.id.d5:
               putIntent((ImageView)findViewById(R.id.i5), ((TextView)findViewById(R.id.d5)).getText().toString(),
                       Integer.getInteger(((TextView)findViewById(R.id.p5)).getText().toString()),intent);
-              break;
-          case R.id.d6:
-              putIntent((ImageView)findViewById(R.id.i6), ((TextView)findViewById(R.id.d6)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p6)).getText().toString()),intent);
-              break;
-          case R.id.d7:
-              putIntent((ImageView)findViewById(R.id.i7), ((TextView)findViewById(R.id.d7)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p7)).getText().toString()),intent);
-              break;
-          case R.id.d8:
-              putIntent((ImageView)findViewById(R.id.i8), ((TextView)findViewById(R.id.d8)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p8)).getText().toString()),intent);
-              break;
-          case R.id.d9:
-              putIntent((ImageView)findViewById(R.id.i9), ((TextView)findViewById(R.id.d9)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p9)).getText().toString()),intent);
-              break;
-          case R.id.d10:
-              putIntent((ImageView)findViewById(R.id.i10), ((TextView)findViewById(R.id.d10)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p10)).getText().toString()),intent);
-              break;
-          case R.id.d11:
-              putIntent((ImageView)findViewById(R.id.i11), ((TextView)findViewById(R.id.d11)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p11)).getText().toString()),intent);
-              break;
-          case R.id.d12:
-              putIntent((ImageView)findViewById(R.id.i12), ((TextView)findViewById(R.id.d12)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p12)).getText().toString()),intent);
-              break;
-          case R.id.d13:
-              putIntent((ImageView)findViewById(R.id.i13), ((TextView)findViewById(R.id.d13)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p13)).getText().toString()),intent);
-              break;
-          case R.id.d14:
-              putIntent((ImageView)findViewById(R.id.i14), ((TextView)findViewById(R.id.d14)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p14)).getText().toString()),intent);
-              break;
-          case R.id.d15:
-              putIntent((ImageView)findViewById(R.id.i15), ((TextView)findViewById(R.id.d15)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p15)).getText().toString()),intent);
               break;*/
       }
     }
 
     private void putIntent(ImageView i,String d,int p,Intent intent) {
         i.buildDrawingCache();
-        Bitmap image= findViewById(R.id.i1).getDrawingCache();
+        Bitmap image= ((ImageView)findViewById(R.id.i1)).getDrawingCache();
         //TODO GET THE IMAGE DIRECTLY
         Bundle extras = new Bundle();
         extras.putParcelable("imagebitmap", image);
@@ -203,12 +163,12 @@ String desc;
         startActivity(intent);
     }
 
-    public void downloadDirect(StorageReference imageRef, ImageView imageView) {
+    public void downloadDirectImage(StorageReference imageRef, ImageView imageView) {
 
         try {
             if (imageRef != null) {
                 try {
-                    GlideApp.with(this)
+                    Glide.with(this)
                             .load(imageRef)
                             .into(imageView);
                     Log.e("downloadDirect", "success");
@@ -221,6 +181,9 @@ String desc;
         }catch (Exception ex){
             Log.e("downloadDirect", ex.toString());
         }
+    }
+    public String getPath(){
+        return this.PATH;
     }
 
 }

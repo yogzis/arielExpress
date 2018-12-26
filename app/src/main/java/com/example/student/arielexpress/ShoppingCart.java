@@ -1,5 +1,7 @@
 package com.example.student.arielexpress;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,7 @@ public class ShoppingCart extends AppCompatActivity {
 
     int itemsCount;
     int total;
-    public static ArrayList<ItemScreen> itemsInBag;
+    public static ArrayList<ItemScreen> itemsInBag=new ArrayList<>();
 
 //ItemScreen[] products=new ItemScreen[10];
 
@@ -35,6 +38,7 @@ public class ShoppingCart extends AppCompatActivity {
     }
 
     public void setItemsCount(int itemsCount) {
+        ((TextView)findViewById(R.id.items_count)).setText(""+itemsCount);
         this.itemsCount = itemsCount;
     }
 
@@ -43,6 +47,7 @@ public class ShoppingCart extends AppCompatActivity {
     }
 
     public void setTotal(int total) {
+        ((TextView)findViewById(R.id.total)).setText(""+total);
         this.total = total;
     }
 
@@ -50,6 +55,7 @@ public class ShoppingCart extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.shopping_cart);
        init();
 
     }
@@ -61,41 +67,42 @@ public void init(){
     setTotal(t);
     for (int i = 0; i < itemsInBag.size(); i++) setItems(i);
 }
+
+
     private void setItems(int row) {
         switch (row) {
-            case 1:
+            case 0:
                 loadProduct(row,R.id.i1,R.id.desc1,R.id.p1,R.id.dl1);
                 break;
-            case 2:
+            case 1:
                 loadProduct(row,R.id.i2,R.id.desc2,R.id.p2,R.id.dl2);
                 break;
-            case 3:
+            case 2:
                 loadProduct(row,R.id.i3,R.id.desc3,R.id.p3,R.id.dl3);
                 break;
-            case 4:
+            case 3:
                 loadProduct(row,R.id.i4,R.id.desc4,R.id.p4,R.id.dl4);
                 break;
-            case 5:
+            case 4:
                 loadProduct(row,R.id.i5,R.id.desc5,R.id.p5,R.id.dl5);
                 break;
-            case 6:
+            case 5:
                 loadProduct(row,R.id.i6,R.id.desc6,R.id.p6,R.id.dl6);
                 break;
-            case 7:
+            case 6:
                 loadProduct(row,R.id.i7,R.id.desc7,R.id.p7,R.id.dl7);
                 break;
-            case 8:
+            case 7:
                 loadProduct(row,R.id.i8,R.id.desc8,R.id.p8,R.id.dl8);
                 break;
-            case 9:
+            case 8:
                 loadProduct(row,R.id.i9,R.id.desc9,R.id.p9,R.id.dl9);
                 break;
-            case 10:
+            case 9:
                 loadProduct(row,R.id.i10,R.id.desc10,R.id.p10,R.id.dl10);
                 break;
 
-                default:
-                    break;
+
 
         }
 
@@ -103,13 +110,14 @@ public void init(){
     }
 
     public void loadProduct(int row,int image,int desc,int price,int del) {
+        Bitmap  bmp=itemsInBag.get(row).getImage().getDrawingCache();
+        ((ImageView)findViewById(image)).setImageBitmap(bmp);
 
-        ((ImageView) findViewById(image)).setVisibility(View.VISIBLE);
-        ((ImageView) findViewById(image)).setImageBitmap(itemsInBag.get(row).getImage().getDrawingCache());
-        ((TextView) findViewById(desc)).setVisibility(View.VISIBLE);
+
+
+            //((ImageView) findViewById(image)).setImageResource(itemsInBag.get(row).getImage().getDrawingCache());
         ((TextView) findViewById(desc)).setText(itemsInBag.get(row).getDesc());
-        ((TextView) findViewById(price)).setVisibility(View.VISIBLE);
-        ((TextView) findViewById(price)).setText(itemsInBag.get(row).getPrice());
+         ((TextView) findViewById(price)).setText(""+itemsInBag.get(row).getPrice());
         ((ImageView) findViewById(del)).setVisibility(View.VISIBLE);
     }
 

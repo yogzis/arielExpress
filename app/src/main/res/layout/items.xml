@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.student.arielexpress.MainActivity">
+    android:orientation="vertical">
+    <!--tools:context="com.example.student.arielexpress.MainActivity"-->
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -48,6 +48,8 @@
                 android:visibility="visible" />
 
             <TextView
+                android:onClick="onClick"
+                android:clickable="true"
                 android:gravity="center"
                 android:id="@+id/d1"
                 android:layout_width="200dp"

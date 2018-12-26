@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">arielExpress</string>
+    <string name="title_activity_log_in">log_in</string>
 </resources>
