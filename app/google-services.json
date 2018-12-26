@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "485918852144",
+    "firebase_url": "https://arielexpress-ab094.firebaseio.com",
+    "project_id": "arielexpress-ab094",
+    "storage_bucket": "arielexpress-ab094.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485918852144:android:d6c61a15f91aa86f",
+        "android_client_info": {
+          "package_name": "com.example.student.arielexpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485918852144-5spffhf4dkn6gaonpf2mhoogkedbuoqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDK-s_hEQx6ZB7ZdM-RwXkcTYZUGRri9OE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
