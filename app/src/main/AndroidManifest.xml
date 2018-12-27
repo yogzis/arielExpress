@@ -23,8 +23,8 @@
         <activity android:name=".Items" />
         <activity android:name=".ShoppingCart" />
         <activity android:name=".LogIn"/>
-        <activity android:name=".SignUpActivty"/>
-
+        <activity android:name=".RegistrationActivity"/>
+        <activity android:name=".ProfileActivity"/>
 
     </application>
 

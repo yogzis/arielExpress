@@ -60,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void signUp(View view){
-        Intent intent = new Intent(this, SignUpActivty.class);
+        Intent intent = new Intent(this, LogIn.class);
         startActivity(intent);
     }
 
     public void goToAccount(View view){
-        Intent intent = new Intent(this, Account.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 
