@@ -1,7 +1,9 @@
 package com.example.student.arielexpress;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,10 +45,12 @@ public class LogIn extends AppCompatActivity {
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        if(user != null){
+       /* if(user != null){
             finish();
-            startActivity(new Intent(LogIn.this, MainActivity.class));
-        }
+            Intent intent=new Intent(LogIn.this, MainActivity.class);
+            intent.putExtra("isConnected",true);
+            startActivity(intent);
+        }*/
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +91,7 @@ public class LogIn extends AppCompatActivity {
         FirebaseUser firebaseUser = firebaseAuth.getInstance().getCurrentUser();
         Boolean emailflag = firebaseUser.isEmailVerified();
         Intent intent=new Intent(LogIn.this, MainActivity.class);
+        intent.putExtra("isConnected",true);
         startActivity(intent);
 
     }
