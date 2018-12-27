@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +24,6 @@ public class ShoppingCart extends AppCompatActivity {
     int total;
     public static ArrayList<ItemScreen> itemsInBag=new ArrayList<>();
 
-//ItemScreen[] products=new ItemScreen[10];
 
     public ShoppingCart(int itemsCount, int total, ItemScreen[] products) {
         this.itemsCount = itemsCount;
@@ -110,12 +110,14 @@ public void init(){
     }
 
     public void loadProduct(int row,int image,int desc,int price,int del) {
-        Bitmap  bmp=itemsInBag.get(row).getImage().getDrawingCache();
-        ((ImageView)findViewById(image)).setImageBitmap(bmp);
 
-
-
-            //((ImageView) findViewById(image)).setImageResource(itemsInBag.get(row).getImage().getDrawingCache());
+        try {
+            Bitmap bmp=itemsInBag.get(row).getBmp();
+             if(bmp==null) Log.e("loadProduct","bmp null in shopping");if(bmp==null) Log.e("loadProduct","bmp null in shopping");
+            ((ImageView) findViewById(image)).setImageBitmap(bmp);
+        }catch (Exception e){
+            Log.e("loadProduct",e.getMessage());
+        }
         ((TextView) findViewById(desc)).setText(itemsInBag.get(row).getDesc());
          ((TextView) findViewById(price)).setText(""+itemsInBag.get(row).getPrice());
         ((ImageView) findViewById(del)).setVisibility(View.VISIBLE);

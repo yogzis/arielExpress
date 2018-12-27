@@ -1,8 +1,6 @@
 package com.example.student.arielexpress;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +11,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.io.Serializable;
-
-/**
- * Created by Student on 19/12/2018.
- */
 
 public class ItemScreen extends AppCompatActivity  {
-    ImageView image;
+    Bitmap bmp;
     String desc;
     String size;
     String color;
@@ -34,13 +27,7 @@ public class ItemScreen extends AppCompatActivity  {
 
     }
 
-    public ImageView getImage() {
-        return image;
-    }
 
-    public void setImage(ImageView image) {
-        this.image = image;
-    }
 
     public String getDesc() {
         return desc;
@@ -79,12 +66,20 @@ public class ItemScreen extends AppCompatActivity  {
         this.price = price;
     }
 
-    public ItemScreen(ImageView image, String desc, String size, String color, int price) {
-        this.image = image;
+    public ItemScreen(Bitmap bmp, String desc, String size, String color, int price) {
+        this.bmp = bmp;
         this.desc = desc;
         this.size = size;
         this.color = color;
         this.price = price;
+    }
+
+    public Bitmap getBmp() {
+        return bmp;
+    }
+
+    public void setBmp(Bitmap bmp) {
+        this.bmp = bmp;
     }
 
     @Override
@@ -95,11 +90,8 @@ public class ItemScreen extends AppCompatActivity  {
         Bundle extras = getIntent().getExtras();
 
         Bitmap bmp = (Bitmap) extras.getParcelable("imagebitmap");
-        ImageView image=new ImageView(this);
-        image.setImageBitmap(bmp);
-
-        setImage(image);
-        if(this.image==null)Log.i("onCreate","no image");
+        if(bmp==null) Log.e("loadProduct","bmp null in item screen");
+        this.bmp=bmp;
         ((ImageView) findViewById(R.id.image)).setImageBitmap(bmp );
         ((TextView) findViewById(R.id.desc)).setText(getIntent().getStringExtra("desc"));
         setDesc(getIntent().getStringExtra("desc"));
@@ -126,24 +118,6 @@ public class ItemScreen extends AppCompatActivity  {
     }
 
     public void addToBag(View view){
-        /*Intent intent = new Intent(this, ShoppingCart.class);
-        //image
-        getImage().buildDrawingCache();
-        Bitmap image= findViewById(R.id.i1).getDrawingCache();
-        Bundle extras = new Bundle();
-        extras.putParcelable("image", image);
-        intent.putExtras(extras);
-        //desc
-        intent.putExtra("desc",getDesc());
-        //size
-        intent.putExtra("size",getSize());
-        //color
-        intent.putExtra("color",getColor());
-        //price
-        intent.putExtra("price",getPrice());
-
-        startActivity(intent);*/
-
         ShoppingCart.itemsInBag.add(this);
 
     }
