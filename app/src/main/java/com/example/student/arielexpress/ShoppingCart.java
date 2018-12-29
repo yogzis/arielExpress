@@ -1,5 +1,6 @@
 package com.example.student.arielexpress;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,11 +20,11 @@ import java.util.List;
  */
 
 public class ShoppingCart extends AppCompatActivity {
-
     int itemsCount;
     int total;
     public static ArrayList<ItemScreen> itemsInBag=new ArrayList<>();
-
+    Bundle savedInstanceState=null;
+    boolean created;
 
     public ShoppingCart(int itemsCount, int total, ItemScreen[] products) {
         this.itemsCount = itemsCount;
@@ -54,9 +55,16 @@ public class ShoppingCart extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.shopping_cart);
-       init();
+
+        if(!created){
+            super.onCreate(savedInstanceState);
+            this.savedInstanceState=savedInstanceState;
+            created=true;
+        }
+        //TODO 5
+            setContentView(R.layout.shopping_cart);
+            init();
+
 
     }
 
@@ -110,25 +118,25 @@ public void init(){
     }
 
     public void loadProduct(int row,int image,int desc,int price,int del) {
-
-        try {
             Bitmap bmp=itemsInBag.get(row).getBmp();
-             if(bmp==null) Log.e("loadProduct","bmp null in shopping");if(bmp==null) Log.e("loadProduct","bmp null in shopping");
             ((ImageView) findViewById(image)).setImageBitmap(bmp);
-        }catch (Exception e){
-            Log.e("loadProduct",e.getMessage());
-        }
+
         ((TextView) findViewById(desc)).setText(itemsInBag.get(row).getDesc());
          ((TextView) findViewById(price)).setText(""+itemsInBag.get(row).getPrice());
         ((ImageView) findViewById(del)).setVisibility(View.VISIBLE);
     }
 
     public void deleteItem(View view){
-        String id= view.getResources().getResourceName(view.getId());
-        int row=id.charAt(id.length()-1);
-        if(row==0) row=10;
+        String id= view.getResources().getResourceName(view.getId()).replace("com.example.student.arielexpress:id/","");
+        int row=Integer.parseInt(id.replace("dl","").trim())-1;
         itemsInBag.remove(row);
-        init();
+        onCreate(savedInstanceState);
 
+
+    }
+
+    public void checkout(View view) {
+        Intent intent=new Intent(this, Checkout.class);
+        startActivity(intent);
     }
 }

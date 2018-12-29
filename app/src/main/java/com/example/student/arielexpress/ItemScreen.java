@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class ItemScreen extends AppCompatActivity  {
@@ -118,6 +119,7 @@ public class ItemScreen extends AppCompatActivity  {
     }
 
     public void addToBag(View view){
+        Toast.makeText(this,"item is added to shopping cart",Toast.LENGTH_SHORT).show();
         ShoppingCart.itemsInBag.add(this);
 
     }

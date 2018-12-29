@@ -1,5 +1,6 @@
 package com.example.student.arielexpress;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,12 +33,9 @@ public class Items extends AppCompatActivity implements View.OnClickListener {
 ImageView image;
 int price;
 String desc;
-String PATH;
-
-
-
-    StorageReference storage = FirebaseStorage.getInstance().getReference();
-    DatabaseReference database = FirebaseDatabase.getInstance().getReference("items");
+ProgressDialog pDialog;
+StorageReference storage = FirebaseStorage.getInstance().getReference();
+DatabaseReference database = FirebaseDatabase.getInstance().getReference("items");
 
 
 
@@ -50,9 +49,12 @@ String PATH;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.items);
+        pDialog = new ProgressDialog(Items.this);
+        pDialog.setMessage("loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
         int category=getIntent().getIntExtra("category",0);
         loadDescriptionAndImage(category);
-
     }
 
 
@@ -78,6 +80,7 @@ String PATH;
                             }
                            else {
                                 p.setText(""+childData.getValue());
+
                             }
 
                         }
@@ -85,6 +88,7 @@ String PATH;
                     childIndex++;
 
                 }
+                pDialog.dismiss();
             }
 
             @Override
@@ -118,7 +122,6 @@ String PATH;
                 break;
 
         }
-        PATH=ref.toString();
         return ref;
     }
 
@@ -154,7 +157,6 @@ String PATH;
     private void putIntent(ImageView i,String d,int p,Intent intent) {
         i.buildDrawingCache();
         Bitmap image= ((ImageView)findViewById(R.id.i1)).getDrawingCache();
-        //TODO GET THE IMAGE DIRECTLY
         Bundle extras = new Bundle();
         extras.putParcelable("imagebitmap", image);
         intent.putExtras(extras);
@@ -182,8 +184,6 @@ String PATH;
             Log.e("downloadDirect", ex.toString());
         }
     }
-    public String getPath(){
-        return this.PATH;
-    }
+
 
 }

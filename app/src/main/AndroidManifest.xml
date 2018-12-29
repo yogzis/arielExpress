@@ -25,6 +25,7 @@
         <activity android:name=".LogIn"/>
         <activity android:name=".RegistrationActivity"/>
         <activity android:name=".ProfileActivity"/>
+        <activity android:name=".Checkout"/>
 
     </application>
 

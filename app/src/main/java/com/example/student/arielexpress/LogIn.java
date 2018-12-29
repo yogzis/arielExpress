@@ -1,5 +1,6 @@
 package com.example.student.arielexpress;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ public class LogIn extends AppCompatActivity {
     private EditText Name;
     private EditText Password;
 
-
+    private ProgressDialog progressDialog;
     private Button Login;
     private TextView userRegistration;
     private FirebaseAuth firebaseAuth;
@@ -40,6 +41,7 @@ public class LogIn extends AppCompatActivity {
         Login = (Button)findViewById(R.id.btnLogin);
         userRegistration = (TextView)findViewById(R.id.tvRegister);
 
+        progressDialog = new ProgressDialog(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -71,11 +73,14 @@ public class LogIn extends AppCompatActivity {
 
     private void validate(String userName, String userPassword) {
 
+        progressDialog.setMessage("connecting..");
+        progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(userName, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    progressDialog.dismiss();
                     checkEmailVerification();
                 }else{
                     Toast.makeText(LogIn.this, "Login Failed", Toast.LENGTH_SHORT).show();
