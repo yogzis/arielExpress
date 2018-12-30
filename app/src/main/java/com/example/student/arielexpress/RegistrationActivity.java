@@ -52,7 +52,6 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(validate()){
-                    //Upload data to the database
                     String user_email = userEmail.getText().toString().trim();
                     String user_password = userPassword.getText().toString().trim();
 
@@ -61,7 +60,6 @@ public class RegistrationActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if(task.isSuccessful()){
-                                //sendEmailVerification();
                                 sendUserData();
                                 firebaseAuth.signOut();
                                 Toast.makeText(RegistrationActivity.this, "Successfully Registered, Upload complete!", Toast.LENGTH_SHORT).show();

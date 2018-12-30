@@ -47,17 +47,17 @@ public class LogIn extends AppCompatActivity {
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-       /* if(user != null){
-            finish();
-            Intent intent=new Intent(LogIn.this, MainActivity.class);
-            intent.putExtra("isConnected",true);
-            startActivity(intent);
-        }*/
 
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validate(Name.getText().toString(), Password.getText().toString());
+                if(!Name.getText().toString().equals("")&&!Password.getText().toString().equals("")){
+                    validate(Name.getText().toString(), Password.getText().toString());
+                }
+                else{
+                    Toast.makeText(LogIn.this,"please fill all the fields",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 

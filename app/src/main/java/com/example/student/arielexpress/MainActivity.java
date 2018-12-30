@@ -17,7 +17,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     List<TextView> categories;
     Context context=this;
-    boolean isConnected;
+    static boolean isConnected;
     Button  login;
     Button  logout;
     Button  account;
@@ -38,15 +38,17 @@ public class MainActivity extends AppCompatActivity {
         categories.add((TextView) findViewById(R.id.pants));
         categories.add((TextView) findViewById(R.id.shirts));
         categories.add((TextView) findViewById(R.id.shorts));
+    }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         init();
-
     }
 
     private void init() {
         if(getIntent().getBooleanExtra("isConnected",false)==true)isConnected=true;
-
-        Log.i("isConnected ",""+isConnected);
 
         if(isConnected==true){
             login.setVisibility(View.INVISIBLE);

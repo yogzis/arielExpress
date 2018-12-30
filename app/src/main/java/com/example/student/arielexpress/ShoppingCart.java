@@ -137,6 +137,7 @@ public void init(){
 
     public void checkout(View view) {
         Intent intent=new Intent(this, Checkout.class);
+        intent.putExtra("total",total);
         startActivity(intent);
     }
 }
