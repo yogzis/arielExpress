@@ -23,27 +23,18 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by Student on 19/12/2018.
+ * Items- displays all the items that related for each category
  */
 
 public class Items extends AppCompatActivity implements View.OnClickListener {
-ImageView image;
-int price;
-String desc;
 ProgressDialog pDialog;
 StorageReference storage = FirebaseStorage.getInstance().getReference();
 DatabaseReference database = FirebaseDatabase.getInstance().getReference("items");
-
-
-
-    public void goToShoppingCart(View view){
-        Intent intent = new Intent(this, ShoppingCart.class);
-        startActivity(intent);
-
-    }
+ static   ArrayList<Item> items=new ArrayList<Item>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,110 +44,113 @@ DatabaseReference database = FirebaseDatabase.getInstance().getReference("items"
         pDialog.setMessage("loading");
         pDialog.setCancelable(false);
         pDialog.show();
-        int category=getIntent().getIntExtra("category",0);
-        loadDescriptionAndImage(category);
+        String category=getIntent().getStringExtra("category");
+
+        linkImageToDescription(category);
+        items.clear();
     }
 
-
-    private void loadDescriptionAndImage(final int category) {
-        ImageView i=(ImageView) findViewById(R.id.i1);
-        StorageReference imageRef=getImageRefernce(category);
-        downloadDirectImage(imageRef,i);
-        final TextView d=(TextView)findViewById(R.id.d1);
-        final TextView p=(TextView)findViewById(R.id.p1);
-
+    /**
+     * adds the items and prints to the screen
+     * @param category
+     */
+    private void linkImageToDescription(final String category) {
         database.addValueEventListener(new ValueEventListener() {
-            int childIndex=0;
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int price=0;
                 String desc = null;
+                StorageReference imageRef = null;
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    if(childIndex==category){
+                    if(data.getKey().contains(category)){
                         for(DataSnapshot childData : data.getChildren()){
-
                             if(childData.getKey().toString().contains("desc")) {
-                                d.setText(""+childData.getValue());
+                             desc=childData.getValue().toString();
                             }
-                           else {
-                                p.setText(""+childData.getValue());
-
+                            else if(childData.getKey().toString().contains("location")){
+                              imageRef=storage.child(childData.getValue().toString());
                             }
-
+                            else if(childData.getKey().toString().contains("price")){
+                               price=Integer.parseInt(childData.getValue().toString().trim());
+                            }
                         }
+                        items.add(new Item(imageRef,price,desc));
                     }
-                    childIndex++;
 
                 }
                 pDialog.dismiss();
+                setItemsToScreen(items);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.i("initCategoryItems","The read failed: " + databaseError.getCode());
             }
+
         });
-
     }
 
-    private StorageReference getImageRefernce(int category) {
-        StorageReference ref = null;
-        switch (category){
-            case 0:
-                ref=(storage.child("Products/Hoodies/white_hoodie.jpg"));
-                break;
-            case 1:
-                ref=(storage.child("Products/Jackets/north_face_white.jpg"));
-                break;
-            case 2:
-                ref=(storage.child("Products/Jeans/blue_jeans.jpg"));
-                break;
-            case 3:
-                ref=(storage.child("Products/Pants/red_pants.jpg"));
-                break;
-            case 4:
-                ref=(storage.child("Products/Shirts/boohoo.jpg"));
-                break;
-            case 5:
-                ref=(storage.child("Products/Shorts/training_shorts.jpg"));
-                break;
 
+
+
+
+    private void setItemsToScreen(ArrayList<Item> items) {
+        for(int j=0;j<items.size();j++){
+            Item item=items.get(j);
+            ImageView i=getImageFromIndex(j);
+            TextView p=getPriceFromIndex(j);
+            TextView d=getDescriptionFromIndex(j);
+            setViews(item,i,p,d);
         }
-        return ref;
     }
 
+    private void setViews(Item item, ImageView image, TextView price, TextView description) {
+       price.setText(""+item.getPrice());
+       description.setText(item.getDesc());
+        downloadDirectImage(item.getImage(),image);
+    }
+
+    private TextView getDescriptionFromIndex(int j) {
+        String description="d"+(j+1);
+        int id = getResources().getIdentifier(description, "id", getPackageName());
+        return (TextView) findViewById(id);
+    }
+
+    private TextView getPriceFromIndex(int j) {
+        String price="p"+(j+1);
+        int id = getResources().getIdentifier(price, "id", getPackageName());
+        return (TextView) findViewById(id);
+    }
+
+    private ImageView getImageFromIndex(int j) {
+        String image="i"+(j+1);
+        int id = getResources().getIdentifier(image, "id", getPackageName());
+        return (ImageView) findViewById(id);
+    }
+
+
+
+
+    public void goToShoppingCart(View view){
+        Intent intent = new Intent(this, ShoppingCart.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onClick(View view) {
+        String id= view.getResources().getResourceName(view.getId()).replace("com.example.student.arielexpress:id/","");
+        int index=Integer.parseInt(id.replace("d","").trim())-1;
+
+        ImageView image=getImageFromIndex(index);
+        String desc=getDescriptionFromIndex(index).getText().toString();
+        int price=Integer.parseInt(getPriceFromIndex(index).getText().toString().trim());
         Intent intent = new Intent(this, ItemScreen.class);
-      switch(view.getId()){
-          case R.id.d1:
-              putIntent((ImageView)findViewById(R.id.i1), ((TextView)findViewById(R.id.d1)).getText().toString(),
-                      Integer.parseInt(((String)((TextView)findViewById(R.id.p1)).getText().toString()).trim())
-                      ,intent);
-              break;
-         /* case R.id.d2:
-              putIntent((ImageView)findViewById(R.id.i2), ((TextView)findViewById(R.id.d2)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p2)).getText().toString()),intent);
-              break;
-          case R.id.d3:
-              putIntent((ImageView)findViewById(R.id.i3), ((TextView)findViewById(R.id.d3)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p3)).getText().toString()),intent);
-              break;
-          case R.id.d4:
-              putIntent((ImageView)findViewById(R.id.i4), ((TextView)findViewById(R.id.d4)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p4)).getText().toString()),intent);
-              break;
-          case R.id.d5:
-              putIntent((ImageView)findViewById(R.id.i5), ((TextView)findViewById(R.id.d5)).getText().toString(),
-                      Integer.getInteger(((TextView)findViewById(R.id.p5)).getText().toString()),intent);
-              break;*/
-      }
+        putIntent(index,image,desc,price,intent);
     }
 
-    private void putIntent(ImageView i,String d,int p,Intent intent) {
+    private void putIntent(int index,ImageView i,String d,int p,Intent intent) {
         i.buildDrawingCache();
-        Bitmap image= ((ImageView)findViewById(R.id.i1)).getDrawingCache();
+        Bitmap image= (getImageFromIndex(index)).getDrawingCache();
         Bundle extras = new Bundle();
         extras.putParcelable("imagebitmap", image);
         intent.putExtras(extras);
@@ -165,8 +159,11 @@ DatabaseReference database = FirebaseDatabase.getInstance().getReference("items"
         startActivity(intent);
     }
 
-    public void downloadDirectImage(StorageReference imageRef, ImageView imageView) {
 
+
+
+
+    public void downloadDirectImage(StorageReference imageRef, ImageView imageView) {
         try {
             if (imageRef != null) {
                 try {

@@ -30,7 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.lang.annotation.Target;
 
 /**
- * Created by Student on 19/12/2018.
+ * displays checkout and order confirmation
  */
 
 public class Checkout extends AppCompatActivity{
@@ -126,7 +126,7 @@ public class Checkout extends AppCompatActivity{
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Order Confirmed")
                     .setAutoCancel(true)
-                    .setContentText("An email has been sent to "+email.getText().toString()+" with your order details "); //content
+                    .setContentText(message);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             notificationManager.notify(1, builder.build()

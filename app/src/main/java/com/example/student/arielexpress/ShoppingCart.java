@@ -5,18 +5,21 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Student on 19/12/2018.
+ * displays the shopping cart activity
  */
 
 public class ShoppingCart extends AppCompatActivity {
@@ -26,7 +29,7 @@ public class ShoppingCart extends AppCompatActivity {
     Bundle savedInstanceState=null;
     boolean created;
 
-    public ShoppingCart(int itemsCount, int total, ItemScreen[] products) {
+    public ShoppingCart(int itemsCount, int total) {
         this.itemsCount = itemsCount;
         this.total = total;
     }
@@ -61,7 +64,6 @@ public class ShoppingCart extends AppCompatActivity {
             this.savedInstanceState=savedInstanceState;
             created=true;
         }
-        //TODO 5
             setContentView(R.layout.shopping_cart);
             init();
 
@@ -77,44 +79,17 @@ public void init(){
 }
 
 
+
     private void setItems(int row) {
-        switch (row) {
-            case 0:
-                loadProduct(row,R.id.i1,R.id.desc1,R.id.p1,R.id.dl1);
-                break;
-            case 1:
-                loadProduct(row,R.id.i2,R.id.desc2,R.id.p2,R.id.dl2);
-                break;
-            case 2:
-                loadProduct(row,R.id.i3,R.id.desc3,R.id.p3,R.id.dl3);
-                break;
-            case 3:
-                loadProduct(row,R.id.i4,R.id.desc4,R.id.p4,R.id.dl4);
-                break;
-            case 4:
-                loadProduct(row,R.id.i5,R.id.desc5,R.id.p5,R.id.dl5);
-                break;
-            case 5:
-                loadProduct(row,R.id.i6,R.id.desc6,R.id.p6,R.id.dl6);
-                break;
-            case 6:
-                loadProduct(row,R.id.i7,R.id.desc7,R.id.p7,R.id.dl7);
-                break;
-            case 7:
-                loadProduct(row,R.id.i8,R.id.desc8,R.id.p8,R.id.dl8);
-                break;
-            case 8:
-                loadProduct(row,R.id.i9,R.id.desc9,R.id.p9,R.id.dl9);
-                break;
-            case 9:
-                loadProduct(row,R.id.i10,R.id.desc10,R.id.p10,R.id.dl10);
-                break;
-
-
-
-        }
-
-
+        String image="i"+(row+1);
+        String desc="desc"+(row+1);
+        String price="p"+(row+1);
+        String delete="dl"+(row+1);
+        int resIDImage = getResources().getIdentifier(image, "id", getPackageName());
+        int resIDDesc = getResources().getIdentifier(desc, "id", getPackageName());
+        int resIDPrice = getResources().getIdentifier(price, "id", getPackageName());
+        int resIDDelete = getResources().getIdentifier(delete, "id", getPackageName());
+        loadProduct(row,resIDImage,resIDDesc,resIDPrice,resIDDelete);
     }
 
     public void loadProduct(int row,int image,int desc,int price,int del) {
@@ -128,16 +103,32 @@ public void init(){
 
     public void deleteItem(View view){
         String id= view.getResources().getResourceName(view.getId()).replace("com.example.student.arielexpress:id/","");
-        int row=Integer.parseInt(id.replace("dl","").trim())-1;
+        final int row=Integer.parseInt(id.replace("dl","").trim())-1;
+        final ItemScreen deltedItem=itemsInBag.get(row);
         itemsInBag.remove(row);
         onCreate(savedInstanceState);
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.root), "item is deleted", Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                       itemsInBag.add(row,deltedItem);
+                        onCreate(savedInstanceState);
+                        Snackbar.make(view, "item is restored!", Snackbar.LENGTH_LONG).show();
+                    }
+                });
 
-
+        snackbar.show();
     }
 
     public void checkout(View view) {
         Intent intent=new Intent(this, Checkout.class);
-        intent.putExtra("total",total);
-        startActivity(intent);
+        if(total>0){
+            intent.putExtra("total",total);
+            startActivity(intent);
+        }
+       else{
+            Toast.makeText(this,"There is no itens in the bag!",Toast.LENGTH_LONG).show();
+        }
     }
 }

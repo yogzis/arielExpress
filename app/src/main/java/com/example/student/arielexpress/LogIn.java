@@ -19,6 +19,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Login Screen
+ */
 public class LogIn extends AppCompatActivity {
 
     private EditText Name;
@@ -35,17 +38,17 @@ public class LogIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.log_in);
+        init();
+    }
 
+
+    private void init() {
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
         Login = (Button)findViewById(R.id.btnLogin);
         userRegistration = (TextView)findViewById(R.id.tvRegister);
-
         progressDialog = new ProgressDialog(this);
-
         firebaseAuth = FirebaseAuth.getInstance();
-
-        FirebaseUser user = firebaseAuth.getCurrentUser();
 
 
         Login.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +70,6 @@ public class LogIn extends AppCompatActivity {
                 startActivity(new Intent(LogIn.this, RegistrationActivity.class));
             }
         });
-
 
     }
 

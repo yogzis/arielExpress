@@ -12,6 +12,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * displays item Activity. from this screen the user can add to bag this item
+ */
 
 public class ItemScreen extends AppCompatActivity  {
     Bitmap bmp;

@@ -1,15 +1,18 @@
 package com.example.student.arielexpress;
 
+import android.widget.ImageView;
+
 /**
  * Created by Dheeraj_Kamath on 2/10/2018.
  */
 
 public class UserProfile {
-    public String userAdress;
-    public String userEmail;
-    public String userName;
-    public String userCredit;
-    public String userPhone;
+
+    private String userAdress;
+    private String userEmail;
+    private String userName;
+    private String userCredit;
+    private String userPhone;
 
     public UserProfile(String userAdress, String userEmail, String userName, String userCredit, String userPhone) {
         this.userAdress = userAdress;

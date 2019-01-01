@@ -1,6 +1,5 @@
 package com.example.student.arielexpress;
 
-//this class only for the HashMap in Items.java
 public class PriceAndDescription {
     int price;
     String desc;

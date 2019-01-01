@@ -14,29 +14,36 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main Activity- the first screen on the app
+ * displays categories and login
+ */
 public class MainActivity extends AppCompatActivity {
-    List<TextView> categories;
-    Context context=this;
+
+    private List<TextView> categories;
+    private Context context=this;
     static boolean isConnected;
-    Button  login;
-    Button  logout;
-    Button  account;
-    Bundle savedInstanceState;
+    private Button  login;
+    private Button  logout;
+    private Button  account;
+    private Bundle savedInstanceState;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         this.savedInstanceState=savedInstanceState;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         login=(Button) findViewById(R.id.sign);
         logout=(Button) findViewById(R.id.logout);
         account=(Button) findViewById(R.id.account);
+
         categories=new ArrayList<>();
-        categories.add((TextView) findViewById(R.id.hoodies));
-        categories.add((TextView) findViewById(R.id.jackets));
+        categories.add((TextView) findViewById(R.id.hoodie));
+        categories.add((TextView) findViewById(R.id.jacket));
         categories.add((TextView) findViewById(R.id.jeans));
         categories.add((TextView) findViewById(R.id.pants));
-        categories.add((TextView) findViewById(R.id.shirts));
+        categories.add((TextView) findViewById(R.id.shirt));
         categories.add((TextView) findViewById(R.id.shorts));
     }
 
@@ -47,7 +54,12 @@ public class MainActivity extends AppCompatActivity {
         init();
     }
 
+    /**
+     * initializes login/logout buttons and category's on click listener
+     */
     private void init() {
+        //set visability for login/logout
+        //get intent from Login Screen (if there is intent)
         if(getIntent().getBooleanExtra("isConnected",false)==true)isConnected=true;
 
         if(isConnected==true){
@@ -60,19 +72,20 @@ public class MainActivity extends AppCompatActivity {
             logout.setVisibility(View.INVISIBLE);
             account.setVisibility(View.INVISIBLE);
         }
+
+         //set click listeners
         for(int i=0;i<categories.size();i++){
-            final int finalI = i;
+            final String category = getResources().getResourceName(categories.get(i).getId()).replace("com.example.student.arielexpress:id/","");
+            Log.i("category ",category);
             categories.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(MainActivity.this, Items.class);
-                    intent.putExtra("category", finalI);
+                    intent.putExtra("category", category);
                     startActivity(intent);
 
                 }
             });
-
-
 
         }
     }

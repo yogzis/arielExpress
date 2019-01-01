@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,13 +19,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * displays the user details
+ */
 public class ProfileActivity extends AppCompatActivity {
-
+String TAG="ProfileActivity.java";
     private ImageView image;
     private Button setImage;
     private TextView profileName, profileAdress, profileEmail,profileCredit,profilePhone;
     private static final int CAMERA_REQUEST = 1;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
 
@@ -34,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
         init();
 
     }
+
+
 
     private void init() {
         setContentView(R.layout.activity_profile);
@@ -67,7 +72,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
         setImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,8 +83,10 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-
     }
+
+
+
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
